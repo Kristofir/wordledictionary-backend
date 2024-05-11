@@ -13,13 +13,17 @@ const data = {
   nonanswerWordMetadata: [] as WordMetadata[]
 }
 
-function getAllWordMetadata(wordList: Word[]): WordMetadata[] {
+function getAllWordMetadata(
+  wordList: Word[],
+  possibleAnswers: boolean,
+): WordMetadata[] {
   const wordMetadataList: WordMetadata[] = []
 
   for (const index in wordList) {
     const word = wordList[index]
     const wordMetadata = createWordMetadata(
       word,
+      possibleAnswers,
       getAllUniqueKCharacterCombinations(word)
     )
     wordMetadataList.push(wordMetadata)
@@ -29,9 +33,9 @@ function getAllWordMetadata(wordList: Word[]): WordMetadata[] {
 }
 
 
-data.answerWordMetadata = getAllWordMetadata(answerWords)
-data.nonanswerWordMetadata = getAllWordMetadata(nonanswerWords)
+data.answerWordMetadata = getAllWordMetadata(answerWords, true)
+data.nonanswerWordMetadata = getAllWordMetadata(nonanswerWords, false)
 
 
-await Bun.write("data/output.json", JSON.stringify(data));
+await Bun.write("data/allWordMetadata.json", JSON.stringify(data));
 

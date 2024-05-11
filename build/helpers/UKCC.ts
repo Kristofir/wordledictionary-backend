@@ -38,13 +38,15 @@ export function getAllUniqueKCharacterCombinations(
  * @param indices Character indices
  * @returns Alphabetically sorted string of characters
  */
-function getUKCCString(w: Word, ...indices: Array<number>): UKCC | null {
+export function getUKCCString(w: Word, ...indices: Array<number>): UKCC | null {
   const k = indices.length;
   const UKCCArr: Array<Character> = [];
 
   for (let ki = 0; ki < k; ki++) {
     const characterIndex = indices[ki];
     const character = w[characterIndex];
+
+    if (!character) return null
 
     if (!UKCCArr.includes(character)) {
       UKCCArr.push(character);

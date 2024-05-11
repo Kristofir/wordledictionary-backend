@@ -7,12 +7,12 @@ export interface WordResult {
   overlap: boolean
 
   /**
-   * Word is a possible solution
+   * Word is a possible answer
    */
-  solution: boolean,
+  possibleAnswer: boolean,
 
   /**
-   * Number of remaining solutions this word would eliminate if guessed
+   * Number of remaining possible answers this word would eliminate if guessed
    */
   eliminations: number,
 }
