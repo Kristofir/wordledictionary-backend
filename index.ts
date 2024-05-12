@@ -1,7 +1,7 @@
 import { 
   search, 
-  createWordleDictionarySearchParameters 
-} from "run/search";
+  createApplicationSearchParameters 
+} from "run/search/search";
 
 console.log("Server started");
 
@@ -10,15 +10,9 @@ Bun.serve({
     const url = new URL(req.url);
     const { searchParams } = url
 
-    if (url.pathname === "/search"){
+    if (url.pathname === "/search") {
       console.log("Search params: ", searchParams)
-      console.log(searchParams.get("found"))
-
-      const applicationSearchParameters = createWordleDictionarySearchParameters(searchParams)
-
-      console.log(applicationSearchParameters)
-      
-      const results = await search(applicationSearchParameters)
+      search(searchParams)
       
       return new Response("Ok")
     };

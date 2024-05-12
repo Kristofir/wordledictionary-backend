@@ -1,8 +1,8 @@
 export interface WordMetadata {
   word: Word,
   possibleAnswer: boolean,
-  u2ccs: UKCC[],
-  u3ccs: UKCC[],
-  u4ccs: UKCC[],
-  u5cc: UKCC
+  U2CCs: UKCC[],
+  U3CCs: UKCC[],
+  U4CCs: UKCC[],
+  U5CC: UKCC
 }

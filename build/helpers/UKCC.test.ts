@@ -1,6 +1,6 @@
 import { test, expect, describe, it } from "bun:test"
 
-import type { UKCCDict } from "models/ukcc.ts"
+import type { UKCCDict } from "@models/UKCC.ts"
 
 import { 
   getAllUniqueKCharacterCombinations, 

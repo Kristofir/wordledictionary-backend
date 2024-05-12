@@ -1,6 +1,6 @@
 // unique k-character combinations
 
-import type { UKCCDict } from "models/ukcc";
+import type { UKCCDict } from "@models/UKCC";
 
 export function getAllUniqueKCharacterCombinations(
   w: Word

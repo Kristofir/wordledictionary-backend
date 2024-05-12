@@ -1,5 +1,5 @@
 import type { WordMetadata } from "models/WordMetadata"
-import type { UKCCDict } from "models/ukcc"
+import type { UKCCDict } from "models/UKCC"
 
 export function createWordMetadata(
   w: Word,

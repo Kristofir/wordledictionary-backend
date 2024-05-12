@@ -1,4 +1,4 @@
-import type { WordResult } from "./WordResult"
+import type { WordResult } from "@models/WordResult"
 
 export interface WordleDictionarySearchParameters {
   charactersWithPositions: Array<Character>,
