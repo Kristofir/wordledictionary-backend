@@ -4,12 +4,6 @@ type Table<K extends UKCC|Character> = {
   [key in K]: number;
 }
 
-declare global {
-  interface Object {
-    register(key: UKCC|Character): void;
-  }
-}
-
 Object.defineProperty(Object.prototype, "register", {
   configurable: false,
   writable: false,

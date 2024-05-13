@@ -1,6 +1,6 @@
 import type { WordMetadata } from "models/WordMetadata"
 import { getAllUniqueKCharacterCombinations } from "./helpers/UKCC";
-import { createWordMetadata } from "./helpers/WordMetadataFactory";
+import { createWordMetadata } from "../models/factories/WordMetadataFactory";
 
 const answersFile = Bun.file("build/words-answers.txt");
 const nonanswersFile = Bun.file("build/words-nonanswers.txt");

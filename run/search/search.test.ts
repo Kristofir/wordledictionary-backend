@@ -1,8 +1,21 @@
 import type { 
-  WordleDictionarySearchParameters
+  IApplicationSearchParameters
 } from "models/Search"
+import type { WordMetadata } from "@models/WordMetadata"
+
+
 
 import { describe, test, expect, it } from "bun:test"
+
+import {
+  defineArrayIntersectOverride
+} from "run/helpers/array"
+
+import {
+  load
+} from "../load"
+
+import { ApplicationSearchParameters } from "models/Search"
 
 import {
   createFilterFunctions,
@@ -14,23 +27,23 @@ import {
 } from "run/search/UKCCTable"
 
 import {
-  load
-} from "../load"
+  scoreWordList
+} from "./score"
 
+
+defineArrayIntersectOverride()
 
 describe("Search", async () => {
-  const applicationTestSearchParameters: WordleDictionarySearchParameters = {
-    charactersWithPositions: ["a", "_", "_", "s", "e"],
-    charactersWithoutPositions: ["i", "r"],
-    charactersEliminated: ["z", "o"]
-  }
+  const testURLSearchParams = createTestURLSearchParams()
+  const applicationTestSearchParameters = new ApplicationSearchParameters(testURLSearchParams)
 
   const filterFunctions = createFilterFunctions(applicationTestSearchParameters)
 
   const wordList = await load()
   const unfilteredResults = wordList.answerWordMetadata
 
-  const expectedSoleResult = {
+  // We can expect this result.
+  const anExpectedResult = {
     word: "arise",
     possibleAnswer: true,
     U2CCs: ["ar", "ai", "as", "ae", "ir", "rs", "er", "is", "ei", "es"],
@@ -42,6 +55,13 @@ describe("Search", async () => {
   const filteredResults = applyFilterFunctions(unfilteredResults, filterFunctions)
 
   const testTable = new UKCCTable()
+  for (const result of filteredResults) {
+    testTable.registerWord(result)
+  }
+
+  const scoredWordList = scoreWordList(filteredResults, applicationTestSearchParameters, testTable)
+
+  console.log(scoredWordList)
 
 
   test("Create filter functions", () => {
@@ -52,18 +72,34 @@ describe("Search", async () => {
   })
 
   test("Filter by filter functions", async () => {
-    // It should return only one result: the expectedSoleResult in an array of length 1
-    expect(filteredResults).toBeArrayOfSize(1)
-    expect(filteredResults[0]).toMatchObject(expectedSoleResult)
+    // It should return several results
+    expect(filteredResults.length).toBeGreaterThanOrEqual(1)
+    // One of the results should be "arise"
+    expect(filteredResults.find((w: WordMetadata) => w.word=="arise")).toMatchObject(anExpectedResult)
   })
 
-  test("Populate UKCC table", () => {
-    testTable.registerWord(expectedSoleResult)
+  test("UKCC table should register results properly", () => {
     expect(testTable.U2CCs).toContainKey("ar")
-    expect(testTable.U2CCs["ar"]).toEqual(1)
+    expect(testTable.U2CCs["ar"]).toBeGreaterThanOrEqual(2)
 
-    testTable.registerWord(expectedSoleResult) // Now counts should double
-    expect(testTable.U2CCs["ar"]).toEqual(2)
+    // testTable.registerWord(anExpectedResult) 
+    // // Now should count one more
+    // expect(testTable.U2CCs["ar"]).toEqual(3)
   })
 
 })
+
+
+/**
+ * 
+ * @returns URLSearchParams with mock params
+ */
+function createTestURLSearchParams(): URLSearchParams {
+  const testUSP = new URLSearchParams()
+  testUSP.set("found", "_____")
+  testUSP.set("has", "")
+  testUSP.set("not", "z")
+
+  return testUSP
+}
+

@@ -1,5 +1,5 @@
-import type { WordleDictionarySearchParameters } from "models/Search";
-import type { WordMetadata } from "models/WordMetadata";
+import type { IApplicationSearchParameters } from "@models/Search";
+import type { WordMetadata } from "@models/WordMetadata";
 import { FilterFunction } from "./search";
 
 
@@ -16,7 +16,7 @@ export function applyFilterFunctions(to: WordMetadata[], using: FilterFunction[]
 }
 
 
-export function createFilterFunctions(from: WordleDictionarySearchParameters): FilterFunction[] {
+export function createFilterFunctions(from: IApplicationSearchParameters): FilterFunction[] {
   const WDSP = from;
 
   const filterFunctions: FilterFunction[] = [];

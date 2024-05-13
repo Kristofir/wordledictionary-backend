@@ -25,3 +25,17 @@ describe("Alphabetic helpers", () => {
     expect(isAlphabetic("ari4e")).toBeFalse
   })
 })
+
+describe("Array helpers", () => {
+  test("Array intersection", () => {
+    const arrA = [1, 2]
+    const arrB = [2, 3]
+    const arrC = [4]
+
+    const hasIntersection = arrA.intersects(arrB)
+    const noIntersection = arrA.intersects(arrC)
+
+    expect(hasIntersection).toBeTrue()
+    expect(noIntersection).toBeFalse()
+  })
+})

@@ -7,6 +7,15 @@ declare global {
   type U3CC = UKCC
   type U4CC = UKCC
   type U5CC = UKCC
+
+
+  interface Array<T> {
+    intersects(array: Array<T>): boolean;
+  }
+
+  interface Object {
+    register(key: UKCC | Character): void;
+  }
 }
 
 export {}

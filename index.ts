@@ -1,9 +1,14 @@
 import { 
-  search, 
-  createApplicationSearchParameters 
+  search
 } from "run/search/search";
 
+import {
+  defineArrayIntersectOverride
+} from "run/helpers/array"
+
 console.log("Server started");
+
+defineArrayIntersectOverride()
 
 Bun.serve({
   async fetch(req: Request) {
