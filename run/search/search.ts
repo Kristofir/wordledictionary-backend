@@ -14,7 +14,7 @@ import {
 import { ApplicationSearchParameters } from "models/Search";
 
 // Local types
-export type FilterFunction = (w:WordMetadata)=>boolean
+export type FilterFunction = (w:Word)=>boolean
 
 /**
  * Search function sequence

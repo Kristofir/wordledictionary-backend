@@ -1,4 +1,4 @@
-import type { IApplicationSearchParameters } from "@models/Search";
+import type { ApplicationSearchParameters } from "@models/Search";
 import type { WordMetadata } from "@models/WordMetadata";
 import { FilterFunction } from "./search";
 
@@ -9,27 +9,27 @@ export function applyFilterFunctions(to: WordMetadata[], using: FilterFunction[]
   const filterFunctions = using;
 
   for (const filterFunction of filterFunctions) {
-    wordList = wordList.filter(filterFunction);
+    wordList = wordList.filter((wm) => filterFunction(wm.word));
   }
 
   return wordList;
 }
 
 
-export function createFilterFunctions(from: IApplicationSearchParameters): FilterFunction[] {
+export function createFilterFunctions(from: ApplicationSearchParameters): FilterFunction[] {
   const WDSP = from;
 
   const filterFunctions: FilterFunction[] = [];
 
   for (const character of WDSP.charactersEliminated) {
     filterFunctions.push(
-      (w: WordMetadata) => { return !w.word.includes(character.toLowerCase()); }
+      (w: Word) => { return !w.includes(character.toLowerCase()); }
     );
   }
 
   for (const character of WDSP.charactersWithoutPositions) {
     filterFunctions.push(
-      (w: WordMetadata) => { return w.word.includes(character.toLowerCase()); }
+      (w: Word) => { return w.includes(character.toLowerCase()); }
     );
   }
 
@@ -37,7 +37,7 @@ export function createFilterFunctions(from: IApplicationSearchParameters): Filte
     const character = WDSP.charactersWithPositions[positionIndex];
     if (character !== '_') {
       filterFunctions.push(
-        (w: WordMetadata) => { return (w.word.charAt(positionIndex) == character); }
+        (w: Word) => { return (w.charAt(positionIndex) == character); }
       );
     }
   }
