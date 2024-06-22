@@ -37,6 +37,8 @@ export class ApplicationSearchParameters implements IApplicationSearchParameters
     const hasQueryParam = USP.get('has')?.toLowerCase() ?? null
     const notQueryParam = USP.get('not')?.toLowerCase() ?? null
 
+    console.log(foundQueryParam)
+
     // Validate query parameters
     if (
       !foundQueryParam ||

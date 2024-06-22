@@ -1,15 +1,17 @@
 import type { WordMetadata } from "@models/WordMetadata"
 import type { WordResult } from "@models/WordResult"
+import { ApplicationSearchParameters } from "@models/Search"
+
 import { UKCCTable } from "./UKCCTable"
 
-import { IApplicationSearchParameters } from "@models/Search"
+import { hasOverlap } from "@helpers/word"
 
 export function scoreWordList(
   wl: WordMetadata[], 
-  against: IApplicationSearchParameters,
+  against: ApplicationSearchParameters,
   table: UKCCTable
 ): WordResult[] {
-  const asp = against // relabel parameter
+  const asp = against // relabel parameter: Application Search Parameters
 
   const wordResultList: WordResult[] = []
 
@@ -18,8 +20,44 @@ export function scoreWordList(
 
     const wordResult: WordResult = {
       word: wm.word,
-      overlap: false,
+      overlap: hasOverlap(wm.word, asp),
       possibleAnswer: true,
+      eliminations: eliminationScore
+    }
+    // REDO THIS
+
+    wordResultList.push(wordResult)
+  }
+
+  return wordResultList
+}
+
+/**
+ * Basically takes in a of WordMetadata (internal representation) and returns a list of WordResult (external presentation)
+ * 
+ * @param wl 
+ * @param against 
+ * @param table 
+ * @param possibleAnswer
+ * @returns 
+ */
+export function crunchWordMetadataList(
+  wl: WordMetadata[],
+  against: ApplicationSearchParameters,
+  table: UKCCTable,
+  possibleAnswer: boolean // A little lazy, but this is a quick way to pass this information down the line.
+): WordResult[] {
+  const asp = against // relabel parameter: Application Search Parameters
+
+  const wordResultList: WordResult[] = []
+
+  for (const wm of wl) {
+    const eliminationScore = scoreWord(wm, asp, table)
+
+    const wordResult: WordResult = {
+      word: wm.word,
+      overlap: hasOverlap(wm.word, asp),
+      possibleAnswer: possibleAnswer,
       eliminations: eliminationScore
     }
     // REDO THIS
@@ -32,7 +70,7 @@ export function scoreWordList(
 
 export function scoreWord(
   wm: WordMetadata, 
-  against: IApplicationSearchParameters,
+  against: ApplicationSearchParameters,
   table: UKCCTable
 ): number {
   const asp = against // relabel parameter

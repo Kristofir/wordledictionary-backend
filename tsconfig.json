@@ -28,7 +28,10 @@
       ],
       "@models/*": [
         "models/*"
-      ]
+      ],
+      "@helpers/*": [
+        "run/helpers/*"
+      ],
     }
   }
 }
