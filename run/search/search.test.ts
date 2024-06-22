@@ -30,6 +30,10 @@ import {
   scoreWordList
 } from "./score"
 
+import {
+  search
+} from "./search"
+
 
 defineArrayIntersectOverride()
 
@@ -61,9 +65,6 @@ describe("Search", async () => {
 
   const scoredWordList = scoreWordList(filteredResults, applicationTestSearchParameters, testTable)
 
-  console.log(scoredWordList)
-
-
   test("Create filter functions", () => {
     expect(filterFunctions).toBeArray()
     filterFunctions.forEach((f: Function) => {
@@ -86,7 +87,6 @@ describe("Search", async () => {
     // // Now should count one more
     // expect(testTable.U2CCs["ar"]).toEqual(3)
   })
-
 })
 
 
