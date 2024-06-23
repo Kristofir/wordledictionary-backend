@@ -5,6 +5,12 @@ import {
   isAlphabetic 
 } from "./alpha"
 
+import {
+  hasOverlap
+} from "./word"
+
+import { IApplicationSearchParameters } from "models/Search"
+
 describe("Alphabetic helpers", () => {
   test("is Alphabetic", () => {
     expect(isAlphabetic("arise")).toBeTrue
@@ -37,5 +43,29 @@ describe("Array helpers", () => {
 
     expect(hasIntersection).toBeTrue()
     expect(noIntersection).toBeFalse()
+  })
+})
+
+describe("Word helpers", () => {
+  const searchParameters: IApplicationSearchParameters = {
+    charactersWithPositions: ["a", "_", "_", "_", "_"],
+    charactersWithoutPositions: ["e"],
+    charactersEliminated: ["y"],
+    allFoundCharacters: [],
+    notFoundCharacters: []
+  } // using interface instead of object
+
+  test("Word overlap with search parameters", () => {
+    const word = "arise"
+
+    const overlap = hasOverlap(word, searchParameters)
+    expect(overlap).toBeTrue()
+  })
+
+  test("Word non-overlap with search parameters", () => {
+    const word = "yearn"
+
+    const overlap = hasOverlap(word, searchParameters)
+    expect(overlap).toBeFalse()
   })
 })

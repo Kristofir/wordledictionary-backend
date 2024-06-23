@@ -12,11 +12,11 @@ export function hasOverlap(
     ) { return false }
   }
 
-  for (let characterWithoutPosition in asp.charactersWithoutPositions) {
-    if (!word.includes(characterWithoutPosition)) { return false }
+  for (let characterWithoutPositions of asp.charactersWithoutPositions) {
+    if (!word.includes(characterWithoutPositions)) { return false }
   }
 
-  for (let characterEliminated in asp.charactersEliminated) {
+  for (let characterEliminated of asp.charactersEliminated) {
     if (word.includes(characterEliminated)) { return false }
   }
 
