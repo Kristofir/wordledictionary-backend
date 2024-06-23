@@ -37,5 +37,11 @@ data.answerWordMetadata = getAllWordMetadata(answerWords, true)
 data.nonanswerWordMetadata = getAllWordMetadata(nonanswerWords, false)
 
 
-await Bun.write("data/allWordMetadata.json", JSON.stringify(data));
-
+await Bun.write("data/allWordMetadata.json", JSON.stringify(data))
+  .then(() => {
+    console.log("Word data compilation successful.")
+  })
+  .catch((error) => {
+    console.error("Word data compilation failed.")
+    console.error(error)
+  })

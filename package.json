@@ -2,6 +2,10 @@
   "name": "wordledictionary-backend",
   "module": "index.ts",
   "type": "module",
+  "scripts": {
+    "start": "bun index.ts",
+    "compilewords": "bun build/build.ts"
+  },
   "devDependencies": {
     "@types/express": "^4.17.21",
     "bun-types": "latest"
