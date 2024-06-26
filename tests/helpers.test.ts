@@ -3,11 +3,11 @@ import { describe, test, expect } from "bun:test"
 import { 
   isAlphabeticOrUnderscore, 
   isAlphabetic 
-} from "./alpha"
+} from "@helpers/alpha"
 
 import {
   hasOverlap
-} from "./word"
+} from "@helpers/word"
 
 import { IApplicationSearchParameters } from "models/Search"
 

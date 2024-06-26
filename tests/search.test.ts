@@ -13,14 +13,14 @@ import {
 
 import {
   load
-} from "../load"
+} from "../run/load"
 
 import { ApplicationSearchParameters } from "models/Search"
 
 import {
   createFilterFunctions,
   applyFilterFunctions
-} from "./filter"
+} from "../run/search/filter"
 
 import {
   UKCCTable
@@ -28,11 +28,11 @@ import {
 
 import {
   scoreWordList
-} from "./score"
+} from "../run/search/score"
 
 import {
   search
-} from "./search"
+} from "../run/search/search"
 
 
 defineArrayIntersectOverride()
