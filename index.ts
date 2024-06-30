@@ -8,6 +8,12 @@ import {
   defineArrayIntersectOverride
 } from "run/helpers/array"
 
+import { createCompressedResponse } from "server/compress"
+
+import type {
+  SearchResponseBody
+} from "models/server/responseBody"
+
 console.log("Server started");
 
 defineArrayIntersectOverride()
@@ -39,27 +45,20 @@ Bun.serve({
     const { searchParams } = url
 
     if (url.pathname === "/search") {
-      console.log("Search params: ", searchParams)
       const searchResults = await search(searchParams)
 
-      const compressedSearchResults = Bun.gzipSync(JSON.stringify(searchResults))
-
-      const response = new Response(compressedSearchResults);
-
-      response.headers.set('Content-Type', 'text/html');
-      response.headers.set('Content-Encoding', 'gzip');
-
-      console.log(process)
-
-      if (process.env.NODE_ENV === 'development') {
-        response.headers.set('Access-Control-Allow-Origin', '*');
-        response.headers.set('Cross-Origin-Resource-Policy', 'cross-origin');
-        response.headers.set('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+      const searchResponseBody: SearchResponseBody = {
+        data: {
+          results: searchResults
+        },
+        metadata: {
+          count: searchResults.length
+        }
       }
 
-      console.log(response.headers)
+      const compressedResponse = createCompressedResponse(searchResponseBody)
       
-      return response
+      return compressedResponse
     };
 
     return new Response("Success!");
