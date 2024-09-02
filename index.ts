@@ -11,7 +11,7 @@ import {
 import { createCompressedResponse } from "server/compress"
 
 import type {
-  SearchResponseBody
+  SearchResponseBodyV2
 } from "models/server/responseBody"
 
 console.log("Server started");
@@ -45,16 +45,7 @@ Bun.serve({
     const { searchParams } = url
 
     if (url.pathname === "/search") {
-      const searchResults = await search(searchParams)
-
-      const searchResponseBody: SearchResponseBody = {
-        data: {
-          results: searchResults
-        },
-        metadata: {
-          count: searchResults.length
-        }
-      }
+      const searchResponseBody: SearchResponseBodyV2 = await search(searchParams)
 
       const compressedResponse = createCompressedResponse(searchResponseBody)
       

@@ -9,4 +9,30 @@ export interface SearchResponseBody {
   }
 }
 
-export type ResponseBody = SearchResponseBody
+export interface SearchResponseBodyV2 {
+  data: {
+    results: SearchResults
+  },
+  metadata: {
+    maxPossibleAnswerScore: number,
+    counts: {
+      remainingPossibleAnswers: number,
+      eliminatedPossibleAnswers: number,
+      nonanswers: number
+    }
+  }
+}
+
+export interface SearchResults {
+  remainingPossibleAnswers: WordResult[],
+  eliminatedPossibleAnswers: {
+    highPotential: WordResult[],
+    lowPotential: WordResult[]
+  },
+  nonanswers: {
+    highPotential: WordResult[],
+    lowPotential: WordResult[]
+  }
+}
+
+export type ResponseBody = SearchResponseBody | SearchResponseBodyV2

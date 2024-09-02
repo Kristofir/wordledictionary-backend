@@ -63,7 +63,7 @@ export class ApplicationSearchParameters implements IApplicationSearchParameters
       this.charactersWithoutPositions
     ).filter((c: Character) => isAlphabetic(c))
 
-    this.notFoundCharacters = alphabet.filter((c: Character) => 
+    this.notFoundCharacters = alphabet.filter((c: Character) =>
       !this.allFoundCharacters.includes(c) &&
       !this.charactersEliminated.includes(c)
     )
