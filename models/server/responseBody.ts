@@ -19,7 +19,8 @@ export interface SearchResponseBodyV2 {
       remainingPossibleAnswers: number,
       eliminatedPossibleAnswers: number,
       nonanswers: number
-    }
+    },
+    characterCounts: Record<Character, number>
   }
 }
 

@@ -12,7 +12,7 @@ import { createCompressedResponse } from "server/compress"
 
 import type {
   SearchResponseBodyV2
-} from "models/server/responseBody"
+} from "@models/server/responseBody"
 
 console.log("Server started");
 

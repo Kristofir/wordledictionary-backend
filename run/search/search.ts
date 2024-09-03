@@ -16,7 +16,7 @@ import { ApplicationSearchParameters } from "models/Search";
 
 import { scoreWordList, crunchWordMetadataList } from "./score";
 
-import type { SearchResponseBodyV2 } from "models/server/responseBody";
+import type { SearchResponseBodyV2 } from "@models/server/responseBody";
 
 // Local types
 export type FilterFunction = (w:Word)=>boolean
@@ -74,8 +74,6 @@ export async function search(USP: URLSearchParams): Promise<SearchResponseBodyV2
 
   // Package results for response
 
-  const allWordResults = answerWordResults.concat(nonanswerWordResults)
-
   // Filter results into appropriate categories
 
   const remainingPossibleAnswers = answerWordResults.filter((result) => result.eliminations >= 0 && result.overlap == true)
@@ -109,7 +107,8 @@ export async function search(USP: URLSearchParams): Promise<SearchResponseBodyV2
         remainingPossibleAnswers: remainingPossibleAnswers.length,
         eliminatedPossibleAnswers: highPotentialEliminatedPossibleAnswers.length + lowPotentialEliminatedPossibleAnswers.length,
         nonanswers: highPotentialNonanswers.length + lowPotentialNonanswers.length
-      }
+      },
+      characterCounts: table.characters
     }
 }
 
