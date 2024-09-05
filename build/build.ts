@@ -21,6 +21,13 @@ function getAllWordMetadata(
 
   for (const index in wordList) {
     const word = wordList[index]
+
+    // This is kind of a hack to prevent the same word from being included in both answer and nonanswer lists
+    // I learned that the nonanswer words list contains answer words
+    if (possibleAnswers == false && answerWords.includes(word)) {
+      continue
+    }
+
     const wordMetadata = createWordMetadata(
       word,
       possibleAnswers,
