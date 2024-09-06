@@ -8,6 +8,10 @@ export function isAlphabeticOrUnderscore(str: string): boolean {
   return alphabetUnderscoreRegex.test(str);
 }
 
+export function orderAlbhabetically(str: string): string {
+  return str.split("").sort().join("");
+}
+
 /**
  * The entire alphabet
  */

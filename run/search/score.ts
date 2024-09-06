@@ -82,9 +82,15 @@ export function scoreWord(
 
   const notFoundUniqueWordCharacters = uniqueWordCharacters.filter((c: Character) => asp.notFoundCharacters.includes(c))
 
-  let notFoundU2CCs: U2CC[] = wm.U2CCs.filter( U2CC => !asp.allFoundCharacters.intersects( U2CC.split('') ) )
-  let notFoundU3CCs: U3CC[] = wm.U3CCs.filter( U3CC => !asp.allFoundCharacters.intersects(U3CC.split('')) )
-  let notFoundU4CCs: U4CC[] = wm.U4CCs.filter( U4CC => !asp.allFoundCharacters.intersects(U4CC.split('')) )
+  let notFoundU2CCs: U2CC[] = wm.U2CCs.filter(
+    U2CC => !asp.allFoundCharacters.intersects( U2CC.split('') ) 
+  )
+  let notFoundU3CCs: U3CC[] = wm.U3CCs.filter(
+    U3CC => !asp.allFoundCharacters.intersects(U3CC.split(''))
+  )
+  let notFoundU4CCs: U4CC[] = wm.U4CCs.filter(
+    U4CC => !asp.allFoundCharacters.intersects(U4CC.split(''))
+  )
   let notFoundU5CC: U5CC[] = wm.U5CC && !asp.allFoundCharacters.intersects(uniqueWordCharacters) ? [wm.U5CC] : []
 
 

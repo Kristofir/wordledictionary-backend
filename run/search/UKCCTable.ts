@@ -14,10 +14,18 @@ Object.defineProperty(Object.prototype, "register", {
 
 export class UKCCTable {
   characters: Table<Character> = {}
+
+  // Unique K Character Combinations / Ordered K Character Sets
   U2CCs: Table<U2CC> = {}
   U3CCs: Table<U3CC> = {}
   U4CCs: Table<U4CC> = {}
   U5CCs: Table<U5CC> = {}
+
+  // Unique K Character Sets / Unordered K Character Sets
+  U2CSets: Table<U2CSet> = {}
+  U3CSets: Table<U3CSet> = {}
+  U4CSets: Table<U4CSet> = {}
+  U5CSets: Table<U5CSet> = {}
 
   constructor() {
   }

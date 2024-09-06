@@ -1,12 +1,10 @@
-import type { IApplicationSearchParameters } from "models/Search";
-import type { WordMetadata } from "models/WordMetadata";
-import { WordResult } from "@models/WordResult";
-
 import { load } from "../load";
 import { 
   createFilterFunctions, 
   applyFilterFunctions 
 } from "./filter";
+
+import { orderAlbhabetically } from "@helpers/alpha";
 
 import { 
   UKCCTable 
@@ -17,6 +15,7 @@ import { ApplicationSearchParameters } from "models/Search";
 import { scoreWordList, crunchWordMetadataList } from "./score";
 
 import type { SearchResponseBodyV2 } from "@models/server/responseBody";
+import { getAllUniqueKCharacterCombinations } from "build/helpers/UKCC";
 
 // Local types
 export type FilterFunction = (w:Word)=>boolean
@@ -68,6 +67,28 @@ export async function search(USP: URLSearchParams): Promise<SearchResponseBodyV2
     false // the difference from the previous
   )
 
+  // Compute UKCSets
+
+  const UKCCToUKCSetTableKeyMap: Record<string, string> = {
+    "U2CCs": "U2CSets",
+    "U3CCs": "U3CSets",
+    "U4CCs": "U4CSets",
+    "U5CCs": "U5CSets"
+  }
+
+  for (const [UKCCTableKey, UKCSetTableKey] of Object.entries(UKCCToUKCSetTableKeyMap)) {
+    for (const [UKCC, count] of Object.entries(table[UKCCTableKey as keyof UKCCTable])) {
+      const UKCSet = orderAlbhabetically(UKCC)
+
+      if (table[UKCSetTableKey as keyof UKCCTable].hasOwnProperty(UKCSet)) {
+        (table[UKCSetTableKey as keyof UKCCTable] as Record<string, number>)[UKCSet] += count
+      } else {
+        (table[UKCSetTableKey as keyof UKCCTable] as Record<string, number>)[UKCSet] = count
+      }
+    }
+  }
+
+
   // Compute maximum possible answer score to use as a cutoff
   const possibleAnswerScores: number[] = answerWordResults.map((result) => result.eliminations)
   const maxPossibleAnswerScore = Math.max(...possibleAnswerScores)
@@ -108,13 +129,19 @@ export async function search(USP: URLSearchParams): Promise<SearchResponseBodyV2
         eliminatedPossibleAnswers: highPotentialEliminatedPossibleAnswers.length + lowPotentialEliminatedPossibleAnswers.length,
         nonanswers: highPotentialNonanswers.length + lowPotentialNonanswers.length
       },
-      characterCounts: table.characters
+      characterSetCounts: {
+        characters: table.characters,
+        U2CSets: table.U2CSets,
+        U3CSets: table.U3CSets
+      },
+      serverResponseTime: 0
     }
 }
 
 
   const endTimestamp = Date.now();
   const duration = endTimestamp - startTimestamp;
+  searchResults.metadata.serverResponseTime = duration
 
   console.log(duration + "ms")
 

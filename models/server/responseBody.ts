@@ -11,7 +11,7 @@ export interface SearchResponseBody {
 
 export interface SearchResponseBodyV2 {
   data: {
-    results: SearchResults
+    results: SearchResults,
   },
   metadata: {
     maxPossibleAnswerScore: number,
@@ -20,7 +20,12 @@ export interface SearchResponseBodyV2 {
       eliminatedPossibleAnswers: number,
       nonanswers: number
     },
-    characterCounts: Record<Character, number>
+    characterSetCounts: {
+      characters: Record<Character, number>,
+      U2CSets: Record<U2CSet, number>,
+      U3CSets: Record<U2CSet, number>,
+    },
+    serverResponseTime: number
   }
 }
 

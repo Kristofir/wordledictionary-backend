@@ -2,7 +2,8 @@ import { describe, test, expect } from "bun:test"
 
 import { 
   isAlphabeticOrUnderscore, 
-  isAlphabetic 
+  isAlphabetic,
+  orderAlbhabetically
 } from "@helpers/alpha"
 
 import {
@@ -29,6 +30,17 @@ describe("Alphabetic helpers", () => {
     expect(isAlphabetic("arise")).toBeTrue
 
     expect(isAlphabetic("ari4e")).toBeFalse
+  })
+
+  test("Order alphabetically", () => {
+    const ordered1 = orderAlbhabetically("arise")
+    expect(ordered1).toBe("aeirs")
+
+    const ordered2 = orderAlbhabetically("eirz")
+    expect(ordered2).toBe("eirz")
+
+    const ordered3 = orderAlbhabetically("zero")
+    expect(ordered3).toBe("eorz")
   })
 })
 
