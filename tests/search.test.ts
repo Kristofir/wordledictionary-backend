@@ -24,7 +24,7 @@ import {
 
 import {
   ScoringTable
-} from "run/search/UKCCTable"
+} from "models/ScoringTable"
 
 import {
   search
