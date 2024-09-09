@@ -12,8 +12,13 @@ Object.defineProperty(Object.prototype, "register", {
   }
 })
 
-export class UKCCTable {
+/**
+ * Renamed 
+ */
+export class ScoringTable {
   characters: Table<Character> = {}
+
+  answersCount: number = 0 // Will serve as denominator for elimination percentage calculations
 
   // Unique K Character Combinations / Ordered K Character Sets
   U2CCs: Table<U2CC> = {}

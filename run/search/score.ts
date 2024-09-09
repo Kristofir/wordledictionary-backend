@@ -2,35 +2,9 @@ import type { WordMetadata } from "@models/WordMetadata"
 import type { WordResult } from "@models/WordResult"
 import { ApplicationSearchParameters } from "@models/Search"
 
-import { UKCCTable } from "./UKCCTable"
+import { ScoringTable } from "../../models/ScoringTable"
 
 import { hasOverlap } from "@helpers/word"
-
-export function scoreWordList(
-  wl: WordMetadata[], 
-  against: ApplicationSearchParameters,
-  table: UKCCTable
-): WordResult[] {
-  const asp = against // relabel parameter: Application Search Parameters
-
-  const wordResultList: WordResult[] = []
-
-  for (const wm of wl) {
-    const eliminationScore = scoreWord(wm, asp, table)
-
-    const wordResult: WordResult = {
-      word: wm.word,
-      overlap: hasOverlap(wm.word, asp),
-      possibleAnswer: true,
-      eliminations: eliminationScore
-    }
-    // REDO THIS
-
-    wordResultList.push(wordResult)
-  }
-
-  return wordResultList
-}
 
 /**
  * Basically takes in a of WordMetadata (internal representation) and returns a list of WordResult (external presentation)
@@ -44,7 +18,7 @@ export function scoreWordList(
 export function crunchWordMetadataList(
   wl: WordMetadata[],
   against: ApplicationSearchParameters,
-  table: UKCCTable,
+  table: ScoringTable,
   possibleAnswer: boolean // A little lazy, but this is a quick way to pass this information down the line.
 ): WordResult[] {
   const asp = against // relabel parameter: Application Search Parameters
@@ -58,7 +32,8 @@ export function crunchWordMetadataList(
       word: wm.word,
       overlap: hasOverlap(wm.word, asp),
       possibleAnswer: possibleAnswer,
-      eliminations: eliminationScore
+      eliminations: eliminationScore,
+      eliminationsPct: Math.round(eliminationScore / table.answersCount * 10) / 10 // Round to 1 decimal place
     }
     // REDO THIS
 
@@ -71,7 +46,7 @@ export function crunchWordMetadataList(
 export function scoreWord(
   wm: WordMetadata, 
   against: ApplicationSearchParameters,
-  table: UKCCTable
+  table: ScoringTable
 ): number {
   const asp = against // relabel parameter
 

@@ -15,4 +15,9 @@ export interface WordResult {
    * Number of remaining possible answers this word would eliminate if guessed
    */
   eliminations: number,
+
+  /**
+   * Percentage of remaining possible answers this word would eliminate if guessed
+   */
+  eliminationsPct: number
 }

@@ -23,12 +23,8 @@ import {
 } from "../run/search/filter"
 
 import {
-  UKCCTable
+  ScoringTable
 } from "run/search/UKCCTable"
-
-import {
-  scoreWordList
-} from "../run/search/score"
 
 import {
   search
@@ -58,12 +54,10 @@ describe("Search", async () => {
 
   const filteredResults = applyFilterFunctions(unfilteredResults, filterFunctions)
 
-  const testTable = new UKCCTable()
+  const testTable = new ScoringTable()
   for (const result of filteredResults) {
     testTable.registerWord(result)
   }
-
-  const scoredWordList = scoreWordList(filteredResults, applicationTestSearchParameters, testTable)
 
   test("Create filter functions", () => {
     expect(filterFunctions).toBeArray()

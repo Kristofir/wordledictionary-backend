@@ -7,12 +7,12 @@ import {
 import { orderAlbhabetically } from "@helpers/alpha";
 
 import { 
-  UKCCTable 
-} from "./UKCCTable";
+  ScoringTable 
+} from "../../models/ScoringTable";
 
 import { ApplicationSearchParameters } from "models/Search";
 
-import { scoreWordList, crunchWordMetadataList } from "./score";
+import { crunchWordMetadataList } from "./score";
 
 import type { SearchResponseBodyV2 } from "@models/server/responseBody";
 import { getAllUniqueKCharacterCombinations } from "build/helpers/UKCC";
@@ -43,10 +43,11 @@ export async function search(USP: URLSearchParams): Promise<SearchResponseBodyV2
 
   // Table to track the number of UKCCs among filtered answer results
   // We don't want to include nonanswer words, because this table will be used to score any word for its performance in eliminating answer candidates.
-  const table = new UKCCTable()
+  const table = new ScoringTable()
   
   // Perform the actual filtering
   const filteredAnswerWordMetadata = applyFilterFunctions(allAnswerWordMetadata, filterFunctions)
+  table.answersCount = filteredAnswerWordMetadata.length // get remaining (filtered) answers count immediately, will be used to calculate elimination percentage later
 
   // Populate table with filtered answer words
   for (const answerWordMetadata of filteredAnswerWordMetadata) {
@@ -77,13 +78,13 @@ export async function search(USP: URLSearchParams): Promise<SearchResponseBodyV2
   }
 
   for (const [UKCCTableKey, UKCSetTableKey] of Object.entries(UKCCToUKCSetTableKeyMap)) {
-    for (const [UKCC, count] of Object.entries(table[UKCCTableKey as keyof UKCCTable])) {
+    for (const [UKCC, count] of Object.entries(table[UKCCTableKey as keyof ScoringTable])) {
       const UKCSet = orderAlbhabetically(UKCC)
 
-      if (table[UKCSetTableKey as keyof UKCCTable].hasOwnProperty(UKCSet)) {
-        (table[UKCSetTableKey as keyof UKCCTable] as Record<string, number>)[UKCSet] += count
+      if (table[UKCSetTableKey as keyof ScoringTable].hasOwnProperty(UKCSet)) {
+        (table[UKCSetTableKey as keyof ScoringTable] as Record<string, number>)[UKCSet] += count
       } else {
-        (table[UKCSetTableKey as keyof UKCCTable] as Record<string, number>)[UKCSet] = count
+        (table[UKCSetTableKey as keyof ScoringTable] as Record<string, number>)[UKCSet] = count
       }
     }
   }
