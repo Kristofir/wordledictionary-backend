@@ -33,7 +33,7 @@ export function crunchWordMetadataList(
       overlap: hasOverlap(wm.word, asp),
       possibleAnswer: possibleAnswer,
       eliminations: eliminationScore,
-      eliminationsPct: Math.round(eliminationScore / table.answersCount * 10) / 10 // Round to 1 decimal place
+      eliminationsPct: Math.round(eliminationScore / table.answersCount * 100)
     }
     // REDO THIS
 
