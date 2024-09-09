@@ -15,7 +15,6 @@ import { ApplicationSearchParameters } from "models/Search";
 import { crunchWordMetadataList } from "./score";
 
 import type { SearchResponseBodyV2 } from "@models/server/responseBody";
-import { getAllUniqueKCharacterCombinations } from "build/helpers/UKCC";
 
 // Local types
 export type FilterFunction = (w:Word)=>boolean
@@ -32,7 +31,6 @@ export async function search(USP: URLSearchParams): Promise<SearchResponseBodyV2
   // Create filters from search parameters
   const applicationSearchParameters = new ApplicationSearchParameters(USP)
   const filterFunctions = createFilterFunctions(applicationSearchParameters)
-  console.log(applicationSearchParameters)
 
   // Load word lists
   const wordLists = await load()
