@@ -24,13 +24,22 @@ describe("Play test", async () => {
   console.log("Begin play")
 
   test("Play several rounds and get all wrong", async () => {
-    let expectedPossibleAnswersCount = 2309
+    let expectedRemainingPossibleAnswersCount = 2309
+    let lastRoundEliminations = 0
 
     // Play 6 rounds
     for (let round=0; round<6; round++) {
       const response = await search(testUSP.USP)
       const remainingPossibleAnswersCount = response.metadata.counts.remainingPossibleAnswers
 
+      console.log(`Round ${round + 1} started with ${remainingPossibleAnswersCount} possible answers with ${lastRoundEliminations} eliminations from last round.`)
+
+      if (remainingPossibleAnswersCount !== expectedRemainingPossibleAnswersCount) {
+        console.error(`Expected ${expectedRemainingPossibleAnswersCount} possible answers, but got ${remainingPossibleAnswersCount} instead.`)
+        console.error(testUSP.USP)
+      }
+
+      expect(remainingPossibleAnswersCount).toEqual(expectedRemainingPossibleAnswersCount)
 
       if (remainingPossibleAnswersCount === 0) {
         break
@@ -39,19 +48,16 @@ describe("Play test", async () => {
       const randomIndex = Math.floor(Math.random() * response.metadata.counts.remainingPossibleAnswers)
       const randomAnswerWordResult = response.data.results.remainingPossibleAnswers[randomIndex]
 
-      console.log(`${expectedPossibleAnswersCount} - ${randomAnswerWordResult.eliminations} -> ${expectedPossibleAnswersCount-randomAnswerWordResult.eliminations}`)
-
-      expectedPossibleAnswersCount = expectedPossibleAnswersCount  - randomAnswerWordResult.eliminations
+      expectedRemainingPossibleAnswersCount = expectedRemainingPossibleAnswersCount  - randomAnswerWordResult.eliminations
       const randomAnswerWord = randomAnswerWordResult.word
+      lastRoundEliminations = randomAnswerWordResult.eliminations
 
-      console.log(`Guessing ${randomAnswerWord}`)
+      console.log(`Guessing ${randomAnswerWord} with elimination power of ${randomAnswerWordResult.eliminations}.`)
 
       for (const character of randomAnswerWord.split('')) {
         testUSP.addNot(character)
       }
     }
-
-    expect(expectedPossibleAnswersCount).toBe(0)
   })
 })
 

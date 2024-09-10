@@ -96,7 +96,7 @@ export async function search(USP: URLSearchParams): Promise<SearchResponseBodyV2
 
   // Filter results into appropriate categories
 
-  const remainingPossibleAnswers = answerWordResults.filter((result) => result.eliminations >= 0 && result.overlap == true)
+  const remainingPossibleAnswers = answerWordResults.filter((result) => result.eliminations >= 0 && result.possibleAnswer == true && result.overlap == true)
 
   const highPotentialEliminatedPossibleAnswers = answerWordResults.filter((result) => result.eliminations >= maxPossibleAnswerScore && result.overlap == false)
 
@@ -141,8 +141,6 @@ export async function search(USP: URLSearchParams): Promise<SearchResponseBodyV2
   const endTimestamp = Date.now();
   const duration = endTimestamp - startTimestamp;
   searchResults.metadata.serverResponseTime = duration
-
-  console.log(duration + "ms")
 
   return searchResults
 }

@@ -1,10 +1,3 @@
-import type { 
-  IApplicationSearchParameters
-} from "models/Search"
-import type { WordMetadata } from "@models/WordMetadata"
-
-
-
 import { describe, test, expect, it } from "bun:test"
 
 import {
@@ -26,9 +19,9 @@ import {
   ScoringTable
 } from "models/ScoringTable"
 
-import {
-  search
-} from "../run/search/search"
+
+// Types
+import type { WordMetadata } from "@models/WordMetadata"
 
 
 defineArrayIntersectOverride()
