@@ -1,0 +1,15 @@
+name: Bun-testflow
+on: [push]
+
+jobs:
+  Bun-test:
+    name: Run all Bun tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+
+      # run any `bun` or `bunx` command
+      - run: echo "Running all Bun tests"
+      - run: bun install
+      - run: bun test
