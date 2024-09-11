@@ -12,4 +12,5 @@ jobs:
       # run any `bun` or `bunx` command
       - run: echo "Running all Bun tests"
       - run: bun install
+      - run: bun run compilewords
       - run: bun test
