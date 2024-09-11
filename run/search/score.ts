@@ -6,22 +6,23 @@ import { ScoringTable } from "../../models/ScoringTable"
 
 import { hasOverlap } from "@helpers/word"
 
+import { doArraysIntersect } from "@helpers/array"
+
 /**
  * Basically takes in a of WordMetadata (internal representation) and returns a list of WordResult (external presentation)
  * 
- * @param wl 
- * @param against 
- * @param table 
- * @param possibleAnswer
+ * @param wl Word List
+ * @param asp Application Search Parameters (not URLSearchParams)
+ * @param table Scoring Table
+ * @param possibleAnswer Admittedly a hacky way to pass this information down the line.
  * @returns 
  */
 export function crunchWordMetadataList(
   wl: WordMetadata[],
-  against: ApplicationSearchParameters,
+  asp: ApplicationSearchParameters,
   table: ScoringTable,
   possibleAnswer: boolean // A little lazy, but this is a quick way to pass this information down the line.
 ): WordResult[] {
-  const asp = against // relabel parameter: Application Search Parameters
 
   const wordResultList: WordResult[] = []
 
@@ -45,10 +46,9 @@ export function crunchWordMetadataList(
 
 export function scoreWord(
   wm: WordMetadata, 
-  against: ApplicationSearchParameters,
+  asp: ApplicationSearchParameters,
   table: ScoringTable
 ): number {
-  const asp = against // relabel parameter
 
   let score = 0
 
@@ -58,15 +58,15 @@ export function scoreWord(
   const notFoundUniqueWordCharacters = uniqueWordCharacters.filter((c: Character) => asp.notFoundCharacters.includes(c))
 
   let notFoundU2CCs: U2CC[] = wm.U2CCs.filter(
-    U2CC => !asp.allFoundCharacters.intersects( U2CC.split('') ) 
+    U2CC => !doArraysIntersect(asp.allFoundCharacters, U2CC.split(''))
   )
   let notFoundU3CCs: U3CC[] = wm.U3CCs.filter(
-    U3CC => !asp.allFoundCharacters.intersects(U3CC.split(''))
+    U3CC => !doArraysIntersect(asp.allFoundCharacters, U3CC.split(''))
   )
   let notFoundU4CCs: U4CC[] = wm.U4CCs.filter(
-    U4CC => !asp.allFoundCharacters.intersects(U4CC.split(''))
+    U4CC => !doArraysIntersect(asp.allFoundCharacters, U4CC.split(''))
   )
-  let notFoundU5CC: U5CC[] = wm.U5CC && !asp.allFoundCharacters.intersects(uniqueWordCharacters) ? [wm.U5CC] : []
+  let notFoundU5CC: U5CC[] = wm.U5CC && !doArraysIntersect(asp.allFoundCharacters, uniqueWordCharacters) ? [wm.U5CC] : []
 
 
   let parsedUKCCs: Record<UKCC, number> = {}
@@ -105,8 +105,6 @@ export function scoreWord(
   for (const [k, v] of Object.entries(parsedUKCCs)) {
     if (v) score += v;
   }
-
-  score -= 1
 
   return score
 }

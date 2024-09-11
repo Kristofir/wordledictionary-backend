@@ -9,21 +9,27 @@ export function getAllUniqueKCharacterCombinations(
     U2CCs: [],
     U3CCs: [],
     U4CCs: [],
-    U5CC: w.split('').toSorted().join('')
+    U5CC: getUKCCString(w, 0, 1, 2, 3, 4) // get all 5 characters
   };
 
   for (let i = 0; i < 5; i++) {
     for (let j = i + 1; j < 5; j++) {
       const c2 = getUKCCString(w, i, j);
-      if (c2) UKCCs.U2CCs.push(c2);
+      if (
+        c2 && !UKCCs.U2CCs.includes(c2) // prevent duplicates
+      ) UKCCs.U2CCs.push(c2);
 
       for (let k = j + 1; k < 5; k++) {
         const c3 = getUKCCString(w, i, j, k);
-        if (c3) UKCCs.U3CCs.push(c3);
+        if (
+          c3 && !UKCCs.U3CCs.includes(c3) // prevent duplicates
+        ) UKCCs.U3CCs.push(c3);
 
         for (let l = k + 1; l < 5; l++) {
           const c4 = getUKCCString(w, i, j, k, l);
-          if (c4) UKCCs.U4CCs.push(c4);
+          if (
+            c4 && !UKCCs.U4CCs.includes(c4) // prevent duplicates
+          ) UKCCs.U4CCs.push(c4);
         }
 
       }

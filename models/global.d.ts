@@ -21,10 +21,6 @@ declare global {
   type U5CSet = UKCSet
 
 
-  interface Array<T> {
-    intersects(array: Array<T>): boolean;
-  }
-
   interface Object {
     register(key: UKCC | Character): void;
   }

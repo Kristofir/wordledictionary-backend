@@ -4,9 +4,6 @@ import {
   search
 } from "run/search/search";
 
-import {
-  defineArrayIntersectOverride
-} from "run/helpers/array"
 
 import { createCompressedResponse } from "server/compress"
 
@@ -15,8 +12,6 @@ import type {
 } from "@models/server/responseBody"
 
 console.log("Server started");
-
-defineArrayIntersectOverride()
 
 
 const { values } = parseArgs({

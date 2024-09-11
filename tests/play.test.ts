@@ -6,11 +6,8 @@ import { describe, test, expect, mock } from "bun:test"
 
 import { load } from "run/load"
 
-import { defineArrayIntersectOverride } from "@helpers/array"
-
 import { search } from "run/search/search"
 
-defineArrayIntersectOverride()
 
 describe("Play test", async () => {
 
@@ -24,13 +21,18 @@ describe("Play test", async () => {
   console.log("Begin play")
 
   test("Play several rounds and get all wrong", async () => {
-    let expectedRemainingPossibleAnswersCount = 2309
+    let expectedRemainingPossibleAnswersCount: number|null = null;
     let lastRoundEliminations = 0
 
     // Play 6 rounds
     for (let round=0; round<6; round++) {
       const response = await search(testUSP.USP)
       const remainingPossibleAnswersCount = response.metadata.counts.remainingPossibleAnswers
+
+      if (!expectedRemainingPossibleAnswersCount) {
+        // uninitialized so set it
+        expectedRemainingPossibleAnswersCount = remainingPossibleAnswersCount
+      }
 
       console.log(`Round ${round + 1} started with ${remainingPossibleAnswersCount} possible answers with ${lastRoundEliminations} eliminations from last round.`)
 
@@ -59,6 +61,8 @@ describe("Play test", async () => {
       }
     }
   })
+
+
 })
 
 

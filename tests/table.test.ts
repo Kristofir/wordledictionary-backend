@@ -11,17 +11,17 @@ describe("Scoring table", async () => {
   const unfilteredResults = wordList.answerWordMetadata
 
 
-  test("Register two samples", () => {
+  test("Register several samples", () => {
 
     const sample1 = unfilteredResults.find(w => w.word === "abate")
     const sample2 = unfilteredResults.find(w => w.word === "abide")
+    const sample3 = unfilteredResults.find(w => w.word === "about")
     
     table.registerWord(sample1!)
     table.registerWord(sample2!)
-
-    console.log(table)
+    table.registerWord(sample3!)
     
     expect(table.characters['a']).toEqual(3)
-    expect(table.U2CCs['ab']).toEqual(2)
+    expect(table.U2CCs['ab']).toEqual(3)
   })
 })

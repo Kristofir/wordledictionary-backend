@@ -37,23 +37,25 @@ export class ScoringTable {
 
   registerWord(wm: WordMetadata) {
 
-    for (const character of wm.word.split('')) {
+    Array.from(new Set(wm.word.split(''))).forEach((character) => {
       this.characters.register(character)
-    }
+    })
 
-    for (const U2CC of wm.U2CCs) {
+    wm.U2CCs.forEach((U2CC) => {
       this.U2CCs.register(U2CC)
-    }
+    })
 
-    for (const U3CC of wm.U3CCs) {
+    wm.U3CCs.forEach((U3CC) => {
       this.U3CCs.register(U3CC)
-    }
+    })
 
-    for (const U4CC of wm.U4CCs) {
+    wm.U4CCs.forEach((U4CC) => {
       this.U4CCs.register(U4CC)
-    }
+    })
 
-    this.U5CCs.register(wm.U5CC)
+    if (wm.U5CC) {
+      this.U5CCs.register(wm.U5CC)
+    }
   }
   
 }

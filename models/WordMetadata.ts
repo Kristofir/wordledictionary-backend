@@ -4,5 +4,5 @@ export interface WordMetadata {
   U2CCs: UKCC[],
   U3CCs: UKCC[],
   U4CCs: UKCC[],
-  U5CC: UKCC
+  U5CC: UKCC | null
 }

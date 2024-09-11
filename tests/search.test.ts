@@ -1,14 +1,12 @@
 import { describe, test, expect, it } from "bun:test"
 
-import {
-  defineArrayIntersectOverride
-} from "run/helpers/array"
+import { 
+  search 
+} from "run/search/search"
 
 import {
   load
 } from "../run/load"
-
-import { ApplicationSearchParameters } from "models/Search"
 
 import {
   createFilterFunctions,
@@ -19,18 +17,41 @@ import {
   ScoringTable
 } from "models/ScoringTable"
 
+import { scoreWord } from "run/search/score"
 
+// Models
+import { ApplicationSearchParameters } from "models/Search"
 // Types
 import type { WordMetadata } from "@models/WordMetadata"
+import { crunchWordMetadataList } from "run/search/score"
 
+describe("Scoring", async () => {
+  const testUSP = new TestURLSearchParamsWrapper("ab___")
+  const testASP = new ApplicationSearchParameters(testUSP.USP)
 
-defineArrayIntersectOverride()
+  const filterFunctions = createFilterFunctions(testASP)
+
+  const wordList = await load()
+  const filteredWordMetadataList = wordList.answerWordMetadata.filter((result: WordMetadata) => result.word.startsWith("ab")) // purposefully constrain list to make it easier to test
+
+  const table = new ScoringTable()
+
+  filteredWordMetadataList.forEach((wm) => {
+    table.registerWord(wm)
+  })
+  const sample = filteredWordMetadataList.find((wm) => wm.word == "abide")! // def exists
+
+  const sampleScore = scoreWord(sample, testASP, table)
+
+  const sampleList = crunchWordMetadataList(filteredWordMetadataList, testASP, table, true)
+
+})
 
 describe("Search", async () => {
-  const testURLSearchParams = createTestURLSearchParams()
-  const applicationTestSearchParameters = new ApplicationSearchParameters(testURLSearchParams)
+  const testUSP = createTestURLSearchParams()
+  const testASP = new ApplicationSearchParameters(testUSP)
 
-  const filterFunctions = createFilterFunctions(applicationTestSearchParameters)
+  const filterFunctions = createFilterFunctions(testASP)
 
   const wordList = await load()
   const unfilteredResults = wordList.answerWordMetadata
@@ -76,6 +97,32 @@ describe("Search", async () => {
   })
 })
 
+describe("Search within simpler sublist", async () => {
+  const testUSP = new TestURLSearchParamsWrapper("ab___")
+  const testASP = new ApplicationSearchParameters(testUSP.USP)
+
+  const wordLists = await load()
+  const simpleAnswerWordList = wordLists.answerWordMetadata.filter(w => w.word.startsWith("ab"))
+
+  const testTable = new ScoringTable()
+  for (const result of simpleAnswerWordList) {
+    testTable.registerWord(result)
+  }
+
+  const answerWordResults = crunchWordMetadataList(
+    simpleAnswerWordList,
+    testASP,
+    testTable,
+    true
+  )
+
+  const originalResultLength = answerWordResults.length
+
+  const randomGuess = answerWordResults[Math.floor(Math.random() * originalResultLength)]
+
+
+})
+
 
 /**
  * 
@@ -87,6 +134,28 @@ function createTestURLSearchParams(): URLSearchParams {
   testUSP.set("has", "")
   testUSP.set("not", "z")
 
+  
+
   return testUSP
 }
 
+
+
+class TestURLSearchParamsWrapper {
+  USP: URLSearchParams;
+  found: string = "_____";
+  has: Set<Character> = new Set();
+  not: Set<Character> = new Set();
+
+  constructor(found: string = "_____", has: string = "", not: string = "") {
+    this.USP = new URLSearchParams()
+    this.USP.set("found", found)
+    this.USP.set("has", has)
+    this.USP.set("not", not)
+  }
+
+  addNot(char: Character) {
+    this.not.add(char)
+    this.USP.set("not", Array.from(this.not).join(''))
+  }
+}

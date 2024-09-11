@@ -10,6 +10,8 @@ import {
   hasOverlap
 } from "@helpers/word"
 
+import { doArraysIntersect } from "@helpers/array"
+
 import { IApplicationSearchParameters } from "models/Search"
 
 describe("Alphabetic helpers", () => {
@@ -50,8 +52,8 @@ describe("Array helpers", () => {
     const arrB = [2, 3]
     const arrC = [4]
 
-    const hasIntersection = arrA.intersects(arrB)
-    const noIntersection = arrA.intersects(arrC)
+    const hasIntersection = doArraysIntersect(arrA, arrB)
+    const noIntersection = doArraysIntersect(arrA, arrC)
 
     expect(hasIntersection).toBeTrue()
     expect(noIntersection).toBeFalse()

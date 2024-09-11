@@ -1,5 +1,6 @@
 /**
  * For setting up overload
+ * @deprecated in favor of checkIntersection
  */
 export function defineArrayIntersectOverride(): void {
   Object.defineProperty(Object.prototype, "intersects", {
@@ -14,4 +15,13 @@ export function defineArrayIntersectOverride(): void {
       return false;
     }
   })
+}
+
+export function doArraysIntersect(arrayA: Array<any>, arrayB: Array<any>): boolean {
+  for (const a of arrayA) {
+    for (const b of arrayB) {
+      if (a == b) return true;
+    }
+  }
+  return false;
 }
