@@ -8,7 +8,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: oven-sh/setup-bun@v2
-      - run: echo "Running all Bun tests"
+      - run: echo "Install Bun"
       - run: bun install
 
   Bun-test:
@@ -17,4 +17,5 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: oven-sh/setup-bun@v2
+      - run: echo "Run Bun tests"
       - run: bun test
