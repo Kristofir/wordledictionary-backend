@@ -2,15 +2,21 @@ name: Bun-testflow
 on: [push]
 
 jobs:
-  Bun-test:
-    name: Run all Bun tests
+  Bun-setup:
+    name: Set up Bun
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: oven-sh/setup-bun@v2
-
-      # run any `bun` or `bunx` command
-      - run: echo "Running all Bun tests"
+      - run: echo "Install Bun"
       - run: bun install
       - run: bun run compilewords
+
+  Bun-test:
+    name: Run Bun tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+      - run: echo "Run Bun tests"
       - run: bun test

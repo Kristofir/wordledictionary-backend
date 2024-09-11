@@ -130,4 +130,5 @@ dist
 .pnp.*
 
 # compiled word data
-data/
+.data/*
+data/allWordMetadata.json
